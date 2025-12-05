@@ -403,9 +403,7 @@ impl Editor {
     }
 
     fn paste_current_row(&mut self) {
-        if self.copied_row.is_empty() {
-            return;
-        }
+        if self.copied_row.is_empty() { return }
         self.n_bytes += self.copied_row.len() as u64;
         let y = (self.cursor.y + 1).min(self.rows.len());
         self.rows.insert(y, Row::new(self.copied_row.clone()));
@@ -571,14 +569,12 @@ impl Editor {
     fn draw_status_bar(&self, buffer: &mut String) {
         // Left part of the status bar
         let modified = if self.dirty { " (modified)" } else { "" };
-        let mut left =
-            format!("{:.30}{modified}", self.file_name.as_deref().unwrap_or("[No Name]"));
+        let mut left = format!("{:.30}{modified}", self.file_name.as_deref().unwrap_or("[No Name]"));
         left.truncate(self.window_width);
 
         // Right part of the status bar
         let size = format_size(self.n_bytes + self.rows.len().saturating_sub(1) as u64);
-        let right =
-            format!("{} | {size} | {}:{}", self.syntax.name, self.cursor.y + 1, self.rx() + 1);
+        let right = format!("{} | {size} | {}:{}", self.syntax.name, self.cursor.y + 1, self.rx() + 1);
 
         // Draw
         let rw = self.window_width.saturating_sub(left.len());
